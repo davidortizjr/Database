@@ -145,7 +145,35 @@ $result = executeQuery($query);
                 ?>
             </div>
     </section>
-
+    
+    <section class="container my-5">
+        <div class="card bg-dark text-light p-4 shadow">
+            <h3 class="card-title mb-4">Add a New Client</h3>
+            <form method="post">
+                <div class="form-group mb-3">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Username" class="form-control"
+                        required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="userInfoID">User Info ID</label>
+                    <input type="text" id="userInfoID" name="userInfoID" placeholder="User Info ID" class="form-control"
+                        required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Email" class="form-control" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Phone Number"
+                        class="form-control" required>
+                </div>
+                <button type="submit" name="btnSubmitClient" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </section>
+    
     <?php if ($editClient): ?>
     <section class="container my-5">
         <div class="card bg-dark text-light p-4 shadow">
