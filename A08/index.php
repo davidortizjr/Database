@@ -134,10 +134,8 @@ $airlineOptions = executeQuery("SELECT DISTINCT airlineName FROM flightLogs");
                     <th>Duration (Minutes)</th>
                     <th>Airline</th>
                     <th>Aircraft Type</th>
-                    <th>Passenger Count</th>
                     <th>Ticket Price</th>
                     <th>Credit Card Number</th>
-                    <th>Credit Card Type</th>
                     <th>Pilot Name</th>
                 </tr>
             </thead>
@@ -152,10 +150,8 @@ $airlineOptions = executeQuery("SELECT DISTINCT airlineName FROM flightLogs");
                         <td><?= $row['flightDurationMinutes'] ?></td>
                         <td><?= $row['airlineName'] ?></td>
                         <td><?= $row['aircraftType'] ?></td>
-                        <td><?= $row['passengerCount'] ?></td>
                         <td><?= $row['ticketPrice'] ?></td>
                         <td><?= $row['creditCardNumber'] ?></td>
-                        <td><?= $row['creditCardType'] ?></td>
                         <td><?= $row['pilotName'] ?></td>
                     </tr>
                 <?php } ?>
