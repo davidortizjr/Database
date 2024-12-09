@@ -1,44 +1,51 @@
 <?php
 include("connect.php");
 
-$departureFilter = $_GET['departureAirportCode'] ?? '';
-$arrivalFilter = $_GET['arrivalAirportCode'] ?? '';
-$airlineFilter = $_GET['airlineName'] ?? '';
-$sortBy = $_GET['sort'] ?? '';
-$orderBy = $_GET['order'] ?? 'ASC';
+$departureFilter = "";
+$arrivalFilter = "";
+$airlineFilter = "";
+$sortBy = "";
+$orderBy = "ASC";
+
+if (isset($_GET['departureAirportCode'])) {
+    $departureFilter = $_GET['departureAirportCode'];
+}
+
+if (isset($_GET['arrivalAirportCode'])) {
+    $arrivalFilter = $_GET['arrivalAirportCode'];
+}
+
+if (isset($_GET['airlineName'])) {
+    $airlineFilter = $_GET['airlineName'];
+}
+
+if (isset($_GET['sort'])) {
+    $sortBy = $_GET['sort'];
+}
+
+if (isset($_GET['order'])) {
+    $orderBy = $_GET['order'];
+}
 
 $query = "SELECT * FROM flightLogs";
 
-if ($departureFilter || $arrivalFilter || $airlineFilter) {
-    $query .= " WHERE";
-
-    if ($departureFilter) {
-        $query .= " departureAirportCode = '$departureFilter'";
-    }
-
-    if ($departureFilter && ($arrivalFilter || $airlineFilter)) {
-        $query .= " AND";
-    }
-
-    if ($arrivalFilter) {
-        $query .= " arrivalAirportCode = '$arrivalFilter'";
-    }
-
-    if ($arrivalFilter && $airlineFilter) {
-        $query .= " AND";
-    }
-
-    if ($airlineFilter) {
-        $query .= " airlineName = '$airlineFilter'";
-    }
+$conditions = [];
+if ($departureFilter !== "") {
+    $conditions[] = "departureAirportCode = '$departureFilter'";
+}
+if ($arrivalFilter !== "") {
+    $conditions[] = "arrivalAirportCode = '$arrivalFilter'";
+}
+if ($airlineFilter !== "") {
+    $conditions[] = "airlineName = '$airlineFilter'";
 }
 
-if ($sortBy) {
-    $query .= " ORDER BY $sortBy";
+if (!empty($conditions)) {
+    $query .= " WHERE " . implode(" AND ", $conditions);
+}
 
-    if ($orderBy) {
-        $query .= " $orderBy";
-    }
+if ($sortBy !== "") {
+    $query .= " ORDER BY $sortBy $orderBy";
 }
 
 $results = executeQuery($query);
@@ -80,7 +87,8 @@ $airlineOptions = executeQuery("SELECT DISTINCT airlineName FROM flightLogs");
                     <select id="arrivalFilter" name="arrivalAirportCode" class="form-select">
                         <option value="">Any</option>
                         <?php while ($row = mysqli_fetch_assoc($arrivalOptions)) { ?>
-                            <option value="<?= $row['arrivalAirportCode'] ?>" <?= $row['arrivalAirportCode'] == $arrivalFilter ? 'selected' : '' ?>>
+                            <option value="<?= $row['arrivalAirportCode'] ?>"
+                                <?= $row['arrivalAirportCode'] == $arrivalFilter ? 'selected' : '' ?>>
                                 <?= $row['arrivalAirportCode'] ?>
                             </option>
                         <?php } ?>
@@ -91,7 +99,8 @@ $airlineOptions = executeQuery("SELECT DISTINCT airlineName FROM flightLogs");
                     <select id="airlineFilter" name="airlineName" class="form-select">
                         <option value="">Any</option>
                         <?php while ($row = mysqli_fetch_assoc($airlineOptions)) { ?>
-                            <option value="<?= $row['airlineName'] ?>" <?= $row['airlineName'] == $airlineFilter ? 'selected' : '' ?>>
+                            <option value="<?= $row['airlineName'] ?>"
+                                <?= $row['airlineName'] == $airlineFilter ? 'selected' : '' ?>>
                                 <?= $row['airlineName'] ?>
                             </option>
                         <?php } ?>
@@ -134,8 +143,10 @@ $airlineOptions = executeQuery("SELECT DISTINCT airlineName FROM flightLogs");
                     <th>Duration (Minutes)</th>
                     <th>Airline</th>
                     <th>Aircraft Type</th>
+                    <th>Passenger Count</th>
                     <th>Ticket Price</th>
                     <th>Credit Card Number</th>
+                    <th>Credit Card Type</th>
                     <th>Pilot Name</th>
                 </tr>
             </thead>
@@ -150,8 +161,10 @@ $airlineOptions = executeQuery("SELECT DISTINCT airlineName FROM flightLogs");
                         <td><?= $row['flightDurationMinutes'] ?></td>
                         <td><?= $row['airlineName'] ?></td>
                         <td><?= $row['aircraftType'] ?></td>
+                        <td><?= $row['passengerCount'] ?></td>
                         <td><?= $row['ticketPrice'] ?></td>
                         <td><?= $row['creditCardNumber'] ?></td>
+                        <td><?= $row['creditCardType'] ?></td>
                         <td><?= $row['pilotName'] ?></td>
                     </tr>
                 <?php } ?>
